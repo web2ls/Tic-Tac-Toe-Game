@@ -1,0 +1,244 @@
+*, *:before, *:after {
+  -webkit-box-sizing: border-box; /* Нужно для мобильного WebKit */
+  -moz-box-sizing: border-box; /* Нужно для Firefox */
+  box-sizing: border-box;
+}
+
+body {
+	background: #34494F;
+}
+
+#container {
+	width: 700px;
+	margin: 20px auto;
+	text-align: center;
+}
+
+.game-header {
+	font-family: 'Sansita', sans-serif;
+	font-weight: 700;
+	font-size: 3em;
+	color: #fff;
+}
+
+.main-screen__start-game-area {
+	margin-top: 120px;
+}
+
+.start-game-btn,
+.join-game-btn,
+.goto-game-btn,
+.restart-game-btn {
+  display: inline-block;
+  width: 180px;
+  height: 50px;
+  background: linear-gradient(#ccc, cyan, #ccc);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px #999;
+  text-align: center;
+  vertical-align: top;
+  font-weight: 700;
+  font-size: 0.8em;
+  line-height: 50px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+.start-game-btn {
+	margin-right: 25px;
+}
+
+.join-game-btn {
+	margin-left: 25px;
+}
+
+.goto-game-btn {
+  margin-top: 35px;
+}
+
+.restart-game-btn {
+	margin-top: 15px;
+}
+
+.start-game-btn:hover,
+.join-game-btn:hover,
+.goto-game-btn:hover,
+.restart-game-btn:hover {
+  box-shadow: 5px 5px 5px #ccc;
+  color: #2ecc71;
+}
+
+.username-input {
+	width: 220px;
+	height: 30px;
+	padding: 0 3px;
+	border: 0;
+	outline: 0;
+	border-bottom: 3px dashed #2ecc71;
+	background: transparent;
+	font-family: Arial, sans-serif;
+	font-weight: 400;
+  font-size: 1em;
+	color: #fff;
+	text-align: center;
+}
+
+#wait-user-screen {
+	margin-top: 120px;
+	font-family: 'Sansita', sans-serif;
+	font-weight: 400;
+	font-size: 1.3em;
+	color: #fff;
+}
+
+.game-id {
+	display: inline-block;
+	margin-left: 10px;
+	font-size: 2em;
+}
+
+.wait-user-text {
+	margin: 15px 0;
+}
+
+#join-game-screen {
+	margin-top: 120px;
+	font-family: 'Sansita', sans-serif;
+	font-weight: 400;
+	font-size: 1.3em;
+	color: #fff;
+  text-align: center;
+}
+
+#join-game-screen table {
+  width: 300px;
+  margin: auto;
+  border: 1px solid #fff;
+  border-collapse: collapse;
+}
+
+#join-game-screen th,
+#join-game-screen td {
+  border: 1px solid #fff;
+}
+
+#join-game-screen tr:hover {
+  background: #ccc;
+}
+
+.gameid-input {
+	display: inline-block;
+	width: 100px;
+	margin-left: 15px;
+	color: #fff;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	border-bottom: 1px dashed #2ecc71;
+	text-align: center;
+	font-size: 1.5em;
+}
+
+.joinlink-to-game {
+  cursor: pointer;
+}
+
+#gameboard-screen {
+  margin-top: 40px;
+}
+
+.board {
+  width: 650px;
+  height: 650px;
+  margin: auto;
+  padding: 25px 0 0;
+  background: #2c3e50;
+}
+
+.square {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  color: #fff;
+	font-family: 'Pangolin', cursive;
+  font-size: 100px;
+  line-height: 200px;
+  /*border: 1px solid #fff;*/
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  text-align: center;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.square:nth-child(odd) {
+  border-left: none;
+  border-right: none;
+}
+
+.square:nth-child(4) {
+  border-left: none;
+  border-right: none;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.square:nth-child(5) {
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.square:nth-child(6) {
+  border-left: none;
+  border-right: none;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.players-info {
+	padding: 0 15px;
+}
+
+.player-one-info,
+.player-two-info {
+	display: inline-block;
+	width: 48%;
+	margin-bottom: 15px;
+	font-family: 'Sansita', sans-serif;
+	font-weight: 700;
+	font-size: 1em;
+	color: #fff;
+}
+
+.player-one-info {
+	text-align: left;
+}
+
+.player-two-info {
+	text-align: right;
+}
+
+.scores-field-one,
+.scores-field-two {
+	display: inline-block;
+	width: 50px;
+	/*margin-left: 15px;*/
+	color: #fff;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	border-bottom: 1px dashed #2ecc71;
+	font-size: 2em;
+	text-align: center;
+}
+
+/*.scores-field-one {
+	text-align: left;
+}
+
+.scores-field-two {
+	text-align: right;
+}*/

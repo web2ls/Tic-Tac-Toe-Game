@@ -1,0 +1,17 @@
+{
+  "name": "hw4_2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "core.js",
+  "scripts": {
+    "start": "webpack-dev-server --watch --hot --content-base public --debug --colors --inline --port 8000 --progress"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.1",
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+  }
+}
