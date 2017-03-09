@@ -43,7 +43,7 @@ io.on('connection', function(socket) {
 					sign: 'X'
 				}}
 			});
-		socket.broadcast.emit('server:availableGamesList', { lobbyList });	
+		socket.broadcast.emit('server:availableGamesList', { lobbyList });
 	});
 
 	socket.on('client:getPlayerTwoSign', function() {
@@ -120,6 +120,7 @@ io.on('connection', function(socket) {
 				if (io.nsps['/'].adapter.rooms[gameId].length < 2 && gameIsPlay === true) {
 					console.log('yep one user in room');
 					io.sockets.in(gameId).emit('server:onePlayerDisconnected');
+					lobbyList.splice(i, 1);
 				};
 			};
 			if (!io.nsps['/'].adapter.rooms[gameId]) {
