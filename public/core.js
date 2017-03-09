@@ -1,5 +1,5 @@
 const port = 8000;
-const socket = io.connect(`http://localhost:${port}`);
+const socket = io.connect(`http://78.24.222.242:${port}`);
 
 const winVar = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4 ,8], [2,  4, 6]];
 
