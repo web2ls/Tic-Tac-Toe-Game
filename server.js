@@ -16,14 +16,13 @@ var playerOneSign = 'X';
 var playerTwoSign = 'O';
 var lobbyList = [];
 
-// function getRoomsCounter(obj) {
-// 	var roomsCounter = 0;
-// 	var serverRooms = obj;
-// 	for (var key in obj) {
-// 		roomsCounter++;
-// 	};
-// 	return roomsCounter
-// };
+function checkLobbyList(gameId) {
+	for (var i = 0; i < lobbyList.length; i++) {
+		if (lobbyList[i].gameId.toString() === gameId.toString()) {
+			lobbyList.splice(i, 1);
+		}
+	};
+};
 
 
 io.on('connection', function(socket) {
@@ -54,6 +53,19 @@ io.on('connection', function(socket) {
 		socket.emit('server:availableGamesList', { lobbyList });
 	});
 
+	socket.on('client:playerOneCloseHost', function(data) {
+		socket.leave(data.gameId);
+		checkLobbyList(data.gameId);
+		socket.broadcast.emit('server:availableGamesList', { lobbyList });
+	});
+
+	socket.on('client:playerExitFromGame', function(data) {
+		io.sockets.in(data.gameId).emit('server:onePlayerDisconnected');
+		socket.leave(data.gameId);
+		checkLobbyList(data.gameId);
+		socket.broadcast.emit('server:availableGamesList', { lobbyList });
+	});
+
 	socket.on('client:playerJoinToGame', function(data) {
 		if (io.nsps['/'].adapter.rooms[data.gameId]) {
 			if (io.nsps['/'].adapter.rooms[data.gameId].length < 2) {
@@ -69,7 +81,6 @@ io.on('connection', function(socket) {
 						players.playerTwo = lobbyList[i].players.playerTwo;
 					}
 				};
-				console.log(lobbyList);
 				socket.join(data.gameId);
 				io.sockets.in(data.gameId).emit('server:gameStarted', { currentTurn: playerOneSign, players });
 			} else {
@@ -118,7 +129,6 @@ io.on('connection', function(socket) {
 			var gameIsPlay = lobbyList[i].gameIsPlay;
 			if (io.nsps['/'].adapter.rooms[gameId]) {
 				if (io.nsps['/'].adapter.rooms[gameId].length < 2 && gameIsPlay === true) {
-					console.log('yep one user in room');
 					io.sockets.in(gameId).emit('server:onePlayerDisconnected');
 					lobbyList.splice(i, 1);
 				};

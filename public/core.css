@@ -28,7 +28,8 @@ body {
 .start-game-btn,
 .join-game-btn,
 .goto-game-btn,
-.restart-game-btn {
+.restart-game-btn,
+.exit-to-main-menu-btn {
   display: inline-block;
   width: 180px;
   height: 50px;
@@ -64,7 +65,8 @@ body {
 .start-game-btn:hover,
 .join-game-btn:hover,
 .goto-game-btn:hover,
-.restart-game-btn:hover {
+.restart-game-btn:hover,
+.exit-to-main-menu-btn:hover {
   box-shadow: 5px 5px 5px #ccc;
   color: #2ecc71;
 }

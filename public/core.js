@@ -1,5 +1,5 @@
 const port = 8000;
-const socket = io.connect(`http://78.24.222.242:${port}`);
+const socket = io.connect(`http://localhost:${port}`);
 
 const winVar = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4 ,8], [2,  4, 6]];
 
@@ -54,6 +54,7 @@ class App extends React.Component {
 
 		this.handleClickStartBtn = this.handleClickStartBtn.bind(this);
 		this.handleClickJoinBtn = this.handleClickJoinBtn.bind(this);
+		this.handleClickExitToMenuBtn = this.handleClickExitToMenuBtn.bind(this);
 		this.handleClickJoinLink = this.handleClickJoinLink.bind(this);
 		this.handleClickRestartBtn = this.handleClickRestartBtn.bind(this);
 		this.onGameCreated = this.onGameCreated.bind(this);
@@ -190,6 +191,27 @@ class App extends React.Component {
 		socket.emit('client:getPlayerTwoSign');
 	}
 
+	handleClickExitToMenuBtn() {
+		if (this.state.isWaitUserScreenVisible) {
+			this.setState({
+				isWaitUserScreenVisible: false,
+				isMainScreenVisible: true
+			});
+			socket.emit('client:playerOneCloseHost', { gameId: this.state.gameId });
+		} else if (this.state.isJoinToGameScreenVisible) {
+			this.setState({
+				isJoinToGameScreenVisible: false,
+				isMainScreenVisible: true
+			});
+		} else if (this.state.isBoardVisible) {
+			this.setState({
+				isBoardVisible: false,
+				isMainScreenVisible: true
+			});
+			socket.emit('client:playerExitFromGame', { gameId: this.state.gameId });
+		}
+	}
+
 	handleClickJoinLink(gameId) {
 		socket.emit('client:playerJoinToGame', { gameId, playerTwoName: this.state.userName });
 		this.setState({ gameId });
@@ -211,12 +233,16 @@ class App extends React.Component {
 						: null
 				}
 
-				{ this.state.isWaitUserScreenVisible ? <WaitUserScreen /> : null }
+				{ this.state.isWaitUserScreenVisible
+					? <WaitUserScreen
+					 		onClickExitToMenuBtn={ this.handleClickExitToMenuBtn }/>
+					: null }
 
 				{
 					this.state.isJoinToGameScreenVisible
 						? <JoinToGameScreen
 								availableGames={ this.state.availableGames }
+								onClickExitToMenuBtn={ this.handleClickExitToMenuBtn }
 						 		onClickJoinLink={ this.handleClickJoinLink } />
 						: null
 				}
@@ -233,6 +259,7 @@ class App extends React.Component {
 							 	playerSign={ this.state.playerSign }
 								userName={ this.state.userName }
 								userScore={ this.state.userScore }
+								onClickExitToMenuBtn={ this.handleClickExitToMenuBtn }
 								onClickRestartBtn={ this.handleClickRestartBtn } />
 						: null
 				}
@@ -290,14 +317,31 @@ class MainScreen extends React.Component {
 }
 
 class WaitUserScreen extends React.Component {
+	constructor() {
+		super();
+
+		this.clickExitToMenuBtn = this.clickExitToMenuBtn.bind(this);
+	}
+
+	clickExitToMenuBtn() {
+		this.props.onClickExitToMenuBtn();
+	}
+
 	render() {
 		return (
-			<div id='wait-user-screen'>
-				<div className='wait-user-text'>
-					Please share this ID: <span className='game-id'></span>
+			<div>
+				<button
+					className='exit-to-main-menu-btn'
+					type='button'
+					onClick={ this.clickExitToMenuBtn }	>Exit to menu
+				</button>
+				<div id='wait-user-screen'>
+					<div className='wait-user-text'>
+						Please share this ID: <span className='game-id'></span>
+					</div>
+					<br />
+					<img src='../../img/loader.svg' alt='loader image' />
 				</div>
-				<br />
-				<img src='../../img/loader.svg' alt='loader image' />
 			</div>
 		)
 	}
@@ -329,30 +373,43 @@ class JoinLink extends React.Component {
 class JoinToGameScreen extends React.Component {
 	constructor() {
 		super();
+
+		this.clickExitToMenuBtn = this.clickExitToMenuBtn.bind(this);
 	}
 
 	componentWillMount() {
 		socket.emit('client:getAvailableGames');
 	}
 
+	clickExitToMenuBtn() {
+		this.props.onClickExitToMenuBtn();
+	}
+
 	render() {
 		return (
-			<div id='join-game-screen'>
-				<h3>Select the game for play:</h3>
-				<table>
-					<tr>
-						<th>Game ID</th>
-						<th>Game creator</th>
-					</tr>
-				{
-					this.props.availableGames.map(item => (
-						<JoinLink
-						 	gameId={ item.gameId }
-							gameCreator={ item.gameCreator }
-						 	onClickJoinLink={ this.props.onClickJoinLink } />)
-					)
-				}
-			</table>
+			<div>
+				<button
+					className='exit-to-main-menu-btn'
+					type='button'
+					onClick={ this.clickExitToMenuBtn }	>Exit to menu
+				</button>
+				<div id='join-game-screen'>
+					<h3>Select the game for play:</h3>
+					<table>
+						<tr>
+							<th>Game ID</th>
+							<th>Game creator</th>
+						</tr>
+						{
+							this.props.availableGames.map(item => (
+								<JoinLink
+								 	gameId={ item.gameId }
+									gameCreator={ item.gameCreator }
+								 	onClickJoinLink={ this.props.onClickJoinLink } />)
+							)
+						}
+					</table>
+				</div>
 			</div>
 		)
 	}
@@ -364,6 +421,7 @@ class Board extends React.Component {
 
 		this.clickSquare = this.clickSquare.bind(this);
 		this.clickRestartBtn = this.clickRestartBtn.bind(this);
+		this.clickExitToMenuBtn = this.clickExitToMenuBtn.bind(this);
 	}
 
 	clickSquare(event) {
@@ -389,35 +447,47 @@ class Board extends React.Component {
 		}
 	}
 
+	clickExitToMenuBtn() {
+		this.props.onClickExitToMenuBtn();
+	}
+
 	render() {
 		return (
-			<div id='gameboard-screen'>
-				<div className='players-info'>
-					<div className='player-one-info'>
-						<span>{ this.props.userName }</span>
-						<br />
-						<span className='scores-field-one'>{this.props.userScore}</span>
-					</div>
-					<div className='player-two-info'>
-						<span>{ this.props.foeName }</span>
-						<br />
-						<span className='scores-field-two'>{this.props.foeScore}</span>
-					</div>
-				</div>
-
-				<div className='board'>
-					{
-						this.props.boardState.map(item => (
-							<div
-								className='square'
-								onClick={ this.clickSquare } >{item}</div>
-						))
-					}
-				</div>
-
+			<div>
 				<button
-					className='restart-game-btn'
-					onClick={ this.clickRestartBtn } >restart game</button>
+					className='exit-to-main-menu-btn'
+					type='button'
+					onClick={ this.clickExitToMenuBtn }	>Exit to menu
+				</button>
+
+				<div id='gameboard-screen'>
+					<div className='players-info'>
+						<div className='player-one-info'>
+							<span>{ this.props.userName }</span>
+							<br />
+							<span className='scores-field-one'>{this.props.userScore}</span>
+						</div>
+						<div className='player-two-info'>
+							<span>{ this.props.foeName }</span>
+							<br />
+							<span className='scores-field-two'>{this.props.foeScore}</span>
+						</div>
+					</div>
+
+					<div className='board'>
+						{
+							this.props.boardState.map(item => (
+								<div
+									className='square'
+									onClick={ this.clickSquare } >{item}</div>
+							))
+						}
+					</div>
+
+					<button
+						className='restart-game-btn'
+						onClick={ this.clickRestartBtn } >restart game</button>
+				</div>
 			</div>
 		)
 	}
